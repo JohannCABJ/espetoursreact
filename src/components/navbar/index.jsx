@@ -32,7 +32,7 @@ const Navbar = () => {
                   isActive ? activeStyle : undefined
                 }
               >
-                Capacidad Transportadoraaaa
+                Capacidad Transportadora
               </NavLink>
             </li>
             <li>

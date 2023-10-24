@@ -2,205 +2,129 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../../components/layout";
 
+let busaut = 16;
+let busetaaut = 1;
+let microaut = 9;
+let swaut = 3;
+let dcaut = 5;
 
 function Vehicle() {
-  const { id } = useParams();
-  const { Placa } = useParams();
-  console.log(id);
-
-  const [vehicleInfo, setVehicleInfo] = useState(null);
+  const [vehicleInfo, setVehicleInfo] = useState([]);
 
   useEffect(() => {
     // Realiza una solicitud a la API para obtener la información del vehículo
-    fetch(`https://appespetours.fly.dev/api/v1/vehicles/${id}`)
+    fetch(`https://appespetours.fly.dev/api/v1/vehicles/`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Respuesta de la API:", data);
-        setVehicleInfo(data);
+        const filteredVehicles = data.filter((vehicle) => {
+          return (
+            (vehicle.TipoCapacidad === "FLOTANTE" ||
+              vehicle.TipoCapacidad === "FIJA") &&
+            vehicle.Status === true
+          );
+        });
+
+        setVehicleInfo(filteredVehicles);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [id]);
+  }, []);
+
+  let bus = vehicleInfo.filter((vehiculo) => vehiculo.Clase === "BUS").length;
+  const resultbus = busaut - bus;
+
+  let buseta = vehicleInfo.filter(
+    (vehiculo) => vehiculo.Clase === "BUSETA"
+  ).length;
+  const resultbuseta = buseta - busetaaut;
+
+  let microbus = vehicleInfo.filter(
+    (vehiculo) => vehiculo.Clase === "MICROBUS"
+  ).length;
+  const resultmicro = microaut - microbus;
+
+  let stationw = vehicleInfo.filter(
+    (vehiculo) => vehiculo.Clase === "STATION WAGON"
+  ).length;
+  const resultsw = swaut - stationw;
+
+  let dc = vehicleInfo.filter(
+    (vehiculo) => vehiculo.Clase === "DOBLE CABINA"
+  ).length;
+  const resultdc = dcaut - dc;
+
+  console.log(buseta, "busetas actuales");
 
   return (
     <Layout>
-      <div>
-        <h2 className="text-center mb-6" >Detalles del Vehículo</h2>
-        {vehicleInfo && (
-          <div>
-            <figure className="px-6">
-              <img
-                className="w-80 h-40  rounded-lg"
-                src={vehicleInfo.Image}
-                alt={Placa}
-              />
-            </figure>
-            <p className="flex flex-col p-6">
-              <span className="font-light text-md mt-2">
-                Placa: {vehicleInfo.Placa}
-              </span>
-              <span className="font-light text-md mt-2">
-                No. Interno: {vehicleInfo.Interno}
-              </span>
-              <span className="font-light text-md mt-2">
-                Modelo: {vehicleInfo.Modelo}
-              </span>
-              <span className="font-light text-md mt-2">
-                Marca: {vehicleInfo.Marca}
-              </span>
-              <span className="font-light text-md mt-2">
-                Clase: {vehicleInfo.Clase}
-              </span>
-              <span className="font-light text-md mt-2">
-                Linea: {vehicleInfo.Linea}
-              </span>
-              <span className="font-light text-md mt-2">
-                Color: {vehicleInfo.Color}
-              </span>
-              <span className="font-light text-md mt-2">
-                Serie: {vehicleInfo.Serie}
-              </span>
-              <span className="font-light text-md mt-2">
-                Chasis: {vehicleInfo.Chasis}
-              </span>
-              <span className="font-light text-md mt-2">
-                Motor: {vehicleInfo.Motor}
-              </span>
-              <span className="font-light text-md mt-2">
-                Carroceria: {vehicleInfo.Carroceria}
-              </span>
-              <span className="font-light text-md mt-2">
-                Capacidad: {vehicleInfo.Capacidad}
-              </span>
-              <span className="font-light text-md mt-2">
-                Licencia Tránsito: {vehicleInfo.LicTransito}
-              </span>
-              <span className="font-light text-md mt-2">
-                No.Tarj. de operación: {vehicleInfo.TarjetaOp}
-              </span>
-              <span className="font-light text-md mt-2">
-                Tecnomecánica: {vehicleInfo.Tecno}
-              </span>
-              <span className="font-light text-md mt-2">
-                SOAT: {vehicleInfo.Soat}
-              </span>
-              <span className="font-light text-md mt-2">
-                Tarj.Operación: {new Date(vehicleInfo.Operacion).toISOString().split('T')[0]}
-              </span>
-              <span className="font-light text-md mt-2">
-                Póliza Contractual: {vehicleInfo.Contractual}
-              </span>
-              <span className="font-light text-md mt-2">
-                Póliza Extracontractual: {vehicleInfo.Extracontractual}
-              </span>
-              <span className="font-light text-md mt-2">
-                Mtto preventivo programado: {vehicleInfo.MttoPrev}
-              </span>
-              <span className="font-light text-md mt-2">
-                Ultimo cambio aceite (km): {vehicleInfo.UltimoKmAceite}
-              </span>
-              <span className="font-light text-md mt-2">
-                Km.Actual: {vehicleInfo.KmActual}
-              </span>
-              <span className="font-light text-md mt-2">
-                Tipo Capacidad: {vehicleInfo.TipoCapacidad}
-              </span>
-              <span className="font-light text-md mt-2">
-                Estado: {vehicleInfo.Estado}
-              </span>
-              <span className="font-light text-md mt-2">
-                Convenio Colaboración: {vehicleInfo.Convenio}
-              </span>
-              <span className="font-light text-md mt-2">
-                Propietario: {vehicleInfo.Propietario}
-              </span>
-              <span className="font-light text-md mt-2">
-                Id Propietario: {vehicleInfo.IdPropietario}
-              </span>
-              <span className="font-light text-md mt-2">
-                Tarjeta de Propiedad: (pdf):{" "}
-                <a
-                  href={vehicleInfo.Propiedadimg}
-                  target="_blank"
-                  rel="noopener noreferrer"
+      <div className="p-6 ">
+        <h1 className="text-2xl font-semibold mb-4 text-center sm:text-center">
+          Capacidad Transportadora asignada a Espetours Resolución
+          20224730066085 de 2022-11-02
+        </h1>
+        <div className="overflow-x-auto md:w-full">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-3 px-2 md:px-4 text-left">Placa</th>
+                <th className="py-3 px-2 md:px-4 text-left">Clase</th>
+                <th className="py-3 px-2 md:px-4 text-left">Tipo Capacidad</th>
+                <th className="py-3 px-2 md:px-4 text-left">Pasajeros</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vehicleInfo.map((vehiculo, index) => (
+                <tr
+                  key={index}
+                  className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
                 >
-                  Click aquí para ver el documento
-                </a>
-              </span>
-              <span className="font-light text-md mt-2">
-                Tenicomecánica (pdf):{" "}
-                <a
-                  href={vehicleInfo.Tecnoimg}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click aquí para ver el documento
-                </a>
-              </span>
-              <span className="font-light text-md mt-2">
-                SOAT (pdf):{" "}
-                <a
-                  href={vehicleInfo.SOATimg}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click aquí para ver el documento
-                </a>
-              </span>
-              <span className="font-light text-md mt-2">
-                Tarjeta Operación: (pdf):{" "}
-                <a
-                  href={vehicleInfo.Operacionimg}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click aquí para ver el documento
-                </a>
-              </span>
-              <span className="font-light text-md mt-2">
-                Poliza Contractual: (pdf):{" "}
-                <a
-                  href={vehicleInfo.Contractualimg}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click aquí para ver el documento
-                </a>
-              </span>
-              <span className="font-light text-md mt-2">
-                Poliza Extracontractual: (pdf):{" "}
-                <a
-                  href={vehicleInfo.Extraconimg}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click aquí para ver el documento
-                </a>
-              </span>
-              <span className="font-light text-md mt-2">
-                Ultima revision preventiva: (pdf):{" "}
-                <a
-                  href={vehicleInfo.BimestralIMG}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click aquí para ver el documento
-                </a>
-              </span>
-              <span className="font-light text-md mt-2">
-                Ficha: (pdf):{" "}
-                <a
-                  href={vehicleInfo.Ficha}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click aquí para ver el documento
-                </a>
-              </span>
-            </p>
-          </div>
-        )}
+                  <td className="py-3 px-2">{vehiculo.Placa}</td>
+                  <td className="py-3 px-2">{vehiculo.Clase}</td>
+                  <td className="py-3 px-2">{vehiculo.TipoCapacidad}</td>
+                  <td className="py-3 px-2">{vehiculo.Capacidad}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <table className="mt-4 w-full">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-2 px-4 text-center">Tipo de Vehículo</th>
+                <th className="py-2 px-4 text-center">Capacidad Autorizada</th>
+                <th className="py-2 px-4 text-center">Total Disponible</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="bg-white">
+                <td className="py-2 px-4 text-center">Bus</td>
+                <td className="py-2 px-4 text-center">{busaut}</td>
+                <td className="py-2 px-4 text-center">{resultbus}</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="py-2 px-4 text-center">Buseta</td>
+                <td className="py-2 px-4 text-center">{busetaaut}</td>
+                <td className="py-2 px-4 text-center">{resultbuseta}</td>
+              </tr>
+              <tr className="bg-white">
+                <td className="py-2 px-4 text-center">Microbus</td>
+                <td className="py-2 px-4 text-center">{microaut}</td>
+                <td className="py-2 px-4 text-center">{resultmicro}</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="py-2 px-4 text-center">Station Wagon</td>
+                <td className="py-2 px-4 text-center">{swaut}</td>
+                <td className="py-2 px-4 text-center">{resultsw}</td>
+              </tr>
+              <tr className="bg-white">
+                <td className="py-2 px-4 text-center">Doble Cabina</td>
+                <td className="py-2 px-4 text-center">{dcaut}</td>
+                <td className="py-2 px-4 text-center">{resultdc}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
       </div>
     </Layout>
   );
