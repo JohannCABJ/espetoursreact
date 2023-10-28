@@ -37,12 +37,12 @@ const Navbar = () => {
             </li>
             <li>
               <NavLink
-                to="/vehicles"
+                to="/prevents"
                 className={({ isActive }) =>
                   isActive ? activeStyle : undefined
                 }
               >
-                Vehiculos
+                Cronograma Preventivas
               </NavLink>
             </li>
             <li>

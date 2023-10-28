@@ -54,8 +54,7 @@ function Vehicle() {
   ).length;
   const resultdc = dcaut - dc;
 
-  console.log(buseta, "busetas actuales");
-
+  
   return (
     <Layout>
       <div className="p-6 ">
