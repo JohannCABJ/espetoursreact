@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../../components/layout";
 
-
 function programmed() {
   const [vehicleData, setVehicleData] = useState([]);
 
   useEffect(() => {
-    fetch('https://appespetours.fly.dev/api/v1/prevents/')
+    fetch("https://appespetours.fly.dev/api/v1/prevents/")
       .then((response) => response.json())
       .then((data) => {
         // Almacenamos todos los vehículos en el estado vehicleData
@@ -21,7 +20,7 @@ function programmed() {
   const getTrueMonthsData = (vehicle) => {
     const trueMonthsData = [];
     Object.keys(vehicle).forEach((month) => {
-      if (month !== '_id' && month !== 'Placa' && vehicle[month] === true) {
+      if (month !== "_id" && month !== "Placa" && vehicle[month] === true) {
         trueMonthsData.push({
           month,
           status: vehicle[`${month}Status`],
@@ -54,20 +53,30 @@ function programmed() {
                   <td className="py-3 px-2">{vehicle.Placa}</td>
                   <td className="py-3 px-2">
                     {getTrueMonthsData(vehicle)
-                      .filter((monthData) => !monthData.month.endsWith("Status"))
+                      .filter(
+                        (monthData) => !monthData.month.endsWith("Status")
+                      )
                       .map((monthData) => monthData.month)
-                      .join(', ')}
+                      .join(", ")}
                   </td>
                   <td className="py-3 px-2">
                     {getTrueMonthsData(vehicle)
-                      .filter((monthData) => !monthData.month.endsWith("Status"))
-                      .map((monthData) => (monthData.status ? "Realizado" : "Pendiente"))
-                      .join(', ')}
+                      .filter(
+                        (monthData) => !monthData.month.endsWith("Status")
+                      )
+                      .map((monthData) =>
+                        monthData.status ? "Realizado" : "Pendiente"
+                      )
+                      .join(", ")}
                   </td>
                   <td className="py-3 px-2">
-                    {getTrueMonthsData(vehicle)
-                      .map((monthData) => monthData.url)
-                      .join(', ')}
+                    {getTrueMonthsData(vehicle).map((monthData, index) => (
+                      <div key={index}>
+                      <a href={monthData.url} target="_blank" rel="noopener noreferrer">
+                        {monthData.url}
+                      </a>
+                    </div>
+                    ))}
                   </td>
                 </tr>
               ))}
@@ -78,7 +87,5 @@ function programmed() {
     </Layout>
   );
 }
-
-
 
 export default programmed;
