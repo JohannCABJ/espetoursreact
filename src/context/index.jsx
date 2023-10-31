@@ -38,6 +38,21 @@ export const ShoppingCartProvider = ({ children }) => {
     if (searchByTitle) setFilteredItems(filteredItemsByTitle(items, searchByTitle))
   }, [items, searchByTitle]) 
 
+  //get prevents programmed
+  const [vehicleData, setVehicleData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://appespetours.fly.dev/api/v1/prevents/")
+      .then((response) => response.json())
+      .then((data) => {
+        // Almacenamos todos los vehículos en el estado vehicleData
+        setVehicleData(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
+
   return (
     <ShoppingCartContext.Provider value={{
       openProductDetail,
@@ -50,8 +65,9 @@ export const ShoppingCartProvider = ({ children }) => {
       filteredItems,
       setFilteredItems,
       searchByTitle,
-      setSearchByTitle
-
+      setSearchByTitle,
+      vehicleData,
+      setVehicleData
     }}>
       {children}
     </ShoppingCartContext.Provider>

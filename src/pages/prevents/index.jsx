@@ -1,21 +1,10 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useContext } from "react";
 import Layout from "../../components/layout";
+import { ShoppingCartContext } from "../../context";
 
 function programmed() {
-  const [vehicleData, setVehicleData] = useState([]);
-
-  useEffect(() => {
-    fetch("https://appespetours.fly.dev/api/v1/prevents/")
-      .then((response) => response.json())
-      .then((data) => {
-        // Almacenamos todos los vehículos en el estado vehicleData
-        setVehicleData(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, []);
+  const context = useContext(ShoppingCartContext);
+  const vehicleData = context.vehicleData
 
   const getTrueMonthsData = (vehicle) => {
     const trueMonthsData = [];
