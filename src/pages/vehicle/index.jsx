@@ -1,9 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../../components/layout";
-import { useLocation } from "react-router-dom";
-import { ShoppingCartContext } from "../../context";
-import ProductDetail from "../../components/productDetail";
+
 
 function Vehicle() {
   const { id } = useParams();
