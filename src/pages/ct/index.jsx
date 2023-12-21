@@ -37,7 +37,8 @@ function Vehicle() {
   let buseta = vehicleInfo.filter(
     (vehiculo) => vehiculo.Clase === "BUSETA"
   ).length;
-  const resultbuseta = buseta - busetaaut;
+  let resultbuseta = buseta - busetaaut;
+  resultbuseta < 0 ? (resultbuseta = busetaaut) : resultbuseta
 
   let microbus = vehicleInfo.filter(
     (vehiculo) => vehiculo.Clase === "MICROBUS"
@@ -54,7 +55,7 @@ function Vehicle() {
   ).length;
   const resultdc = dcaut - dc;
 
-  
+
   return (
     <Layout>
       <div className="p-6 ">
@@ -123,7 +124,7 @@ function Vehicle() {
             </tbody>
           </table>
         </div>
-        
+
       </div>
     </Layout>
   );
