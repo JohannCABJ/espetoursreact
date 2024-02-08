@@ -15,7 +15,7 @@ function Home() {
           <Card key={item.id} data={item} />
         ));
       } else {
-        return <div>We dont have anything :</div>;
+        return context.errorMsg ? <div>{errorMsg}</div> : <div>We dont have anything :</div>;
       }
     } else {
       return context.items?.map((item) => <Card key={item.id} data={item} />);

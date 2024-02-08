@@ -20,15 +20,27 @@ export const ShoppingCartProvider = ({ children }) => {
   //get vehicles
   const [items, setItems] = useState(null)
   const [filteredItems, setFilteredItems] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null);
 
   //get vehicle by plate
   const [searchByTitle, setSearchByTitle] = useState(null)
 
   useEffect(() => {
     fetch('https://appespetours.fly.dev/api/v1/vehicles/')
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => {
+            throw new Error(err.message);
+          });
+        }
+        return response.json();
+      })
       .then(data => setItems(data))
-  }, [])
+      .catch(error => {
+        console.error('Error:', error);
+        setErrorMsg(error.message);
+      });
+  }, []);
 
   const filteredItemsByTitle = (items, searchByTitle) => {
     return items?.filter(item => item.Placa.toLowerCase().includes(searchByTitle.toLowerCase()))
@@ -67,7 +79,8 @@ export const ShoppingCartProvider = ({ children }) => {
       searchByTitle,
       setSearchByTitle,
       vehicleData,
-      setVehicleData
+      setVehicleData,
+      errorMsg
     }}>
       {children}
     </ShoppingCartContext.Provider>

@@ -9,23 +9,34 @@ function Vehicle() {
   console.log(id);
 
   const [vehicleInfo, setVehicleInfo] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Realiza una solicitud a la API para obtener la información del vehículo
     fetch(`https://appespetours.fly.dev/api/v1/vehicles/${id}`)
-      .then((response) => response.json())
+      .then((response) => {
+        //console.log(response);
+        if (!response.ok) {
+          // La respuesta no fue exitosa, obtenemos el mensaje de error del cuerpo de la respuesta
+          return response.json().then((err) => {
+            throw new Error(err.message);
+          });
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log("Respuesta de la API:", data);
         setVehicleInfo(data);
       })
       .catch((error) => {
         console.error("Error:", error);
+        setError(error.message);
       });
   }, [id]);
 
   return (
     <Layout>
       <div>
+      {error && <p>{error}</p>}
         <h2 className="text-center mb-6" >Detalles del Vehículo</h2>
         {vehicleInfo && (
           <div>
