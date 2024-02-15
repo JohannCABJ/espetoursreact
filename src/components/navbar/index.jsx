@@ -27,6 +27,16 @@ const Navbar = () => {
             </li>
             <li>
               <NavLink
+                to="/vehicleupd"
+                className={({ isActive }) =>
+                  isActive ? activeStyle : undefined
+                }
+              >
+                Actualizar Vehículo
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="/ct"
                 className={({ isActive }) =>
                   isActive ? activeStyle : undefined

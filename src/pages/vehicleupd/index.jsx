@@ -4,7 +4,7 @@ import Layout from "../../components/layout";
 import UpdateVehicleForm from "../../components/updvehicles";
 
 
-function Vehicle() {
+function Vehicleupd() {
   const { id } = useParams();
   const { Placa } = useParams();
   console.log(id);
@@ -12,6 +12,8 @@ function Vehicle() {
   const [vehicleInfo, setVehicleInfo] = useState(null);
   const [error, setError] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [serverResponse, setServerResponse] = useState(null);
+
 
   useEffect(() => {
     fetch(`https://appespetours.fly.dev/api/v1/vehicles/${id}`)
@@ -34,6 +36,28 @@ function Vehicle() {
         setError(error.message);
       });
   }, [id]);
+
+  const onVehicleUpdate = (id, data) => {
+    fetch(`https://appespetours.fly.dev/api/v1/vehicles/vehicleupdate/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((updatedVehicle) => {
+        console.log('Vehicle updated:', updatedVehicle);
+        setVehicleInfo(updatedVehicle);
+        setIsUpdating(false); // Cierra el formulario después de la actualización
+        setServerResponse(updatedVehicle); // Guarda la respuesta del servidor en el estado
+        console.log('Server response:', updatedVehicle); // Imprime la respuesta del servidor
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setServerResponse(error.toString()); // Guarda el error en el estado si hay uno
+      });
+  };
 
   return (
     <Layout>
@@ -212,11 +236,20 @@ function Vehicle() {
                 </a>
               </span>
             </p>
+            {!isUpdating ? (
+              <button onClick={() => setIsUpdating(true)}>Actualizar</button>
+            ) : (
+              <UpdateVehicleForm vehicleId={id} onVehicleUpdate={onVehicleUpdate} />
+            )}
           </div>
         )}
       </div>
+      <div>
+      {console.log('Rendering with server response:', serverResponse)}
+      {serverResponse && <div>Response from server: {serverResponse}</div>}
+  </div>
     </Layout>
   );
 }
 
-export default Vehicle;
+export default Vehicleupd;

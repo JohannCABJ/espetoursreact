@@ -6,6 +6,7 @@ import Vehicle from '../vehicle'
 import Ct from '../ct'
 import Prevents from '../prevents'
 import PreventsMonth from '../preventsMonth'
+import Vehicleupd from '../vehicleupd'
 //import MyOrder from '../myorder'
 //import MyOrders from '../myorders'
 //import Signin from '../signin'
@@ -22,6 +23,7 @@ const Approutes = () => {
     { path: '/ct/', element: <Ct /> },
     { path: '/prevents/', element: <Prevents /> },
     { path: '/prevents/:month', element: <PreventsMonth /> },
+    { path: '/vehicleupd/:id', element: <Vehicleupd /> },
     { path: '/*', element: <NotFound /> },
     //{ path: '/myaccount', element: <MyAccount /> },
     //{ path: '/myorder', element: <MyOrder /> },
