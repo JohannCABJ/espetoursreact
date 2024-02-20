@@ -14,6 +14,9 @@ function Vehicleupd() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [serverResponse, setServerResponse] = useState(null);
 
+  useEffect(() => {
+    console.log('Server response:', serverResponse);
+  }, [serverResponse]);
 
   useEffect(() => {
     fetch(`https://appespetours.fly.dev/api/v1/vehicles/${id}`)
@@ -48,7 +51,7 @@ function Vehicleupd() {
       .then((response) => response.json())
       .then((updatedVehicle) => {
         console.log('Vehicle updated:', updatedVehicle);
-        setVehicleInfo(updatedVehicle);
+        //setVehicleInfo(updatedVehicle);
         setIsUpdating(false); // Cierra el formulario después de la actualización
         setServerResponse(updatedVehicle); // Guarda la respuesta del servidor en el estado
         console.log('Server response:', updatedVehicle); // Imprime la respuesta del servidor
@@ -246,10 +249,11 @@ function Vehicleupd() {
       </div>
       <div>
       {console.log('Rendering with server response:', serverResponse)}
-      {serverResponse && <div>Response from server: {serverResponse}</div>}
+      {serverResponse && <div>Response from server: {serverResponse.message}</div>}
   </div>
     </Layout>
   );
 }
 
 export default Vehicleupd;
+

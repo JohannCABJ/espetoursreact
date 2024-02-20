@@ -22,7 +22,7 @@ function Vehicle() {
           return response.json().then((err) => {
             throw new Error(err.message);
           });
-        }
+        } 
         return response.json();
       })
       .then((data) => {
