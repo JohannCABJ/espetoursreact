@@ -9,14 +9,39 @@ function Vehicleupd() {
   const { Placa } = useParams();
   console.log(id);
 
-  const [vehicleInfo, setVehicleInfo] = useState(null);
+  const [vehicleInfo, setVehicleInfo] = useState({ Placa: ''});
   const [error, setError] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [serverResponse, setServerResponse] = useState(null);
+  const [isEditing, setIsEditing] = useState({ Placa: false});
+
+
+const handleInputChange = (e, fieldName) => {
+  setVehicleInfo(prevVehicleInfo => ({ ...prevVehicleInfo, [fieldName]: e.target.value }));
+};
+
+const handleSaveClick = () => {
+  setIsEditing(prevIsEditing => ({ ...prevIsEditing, Placa: false }));
+
+  // Llama a la función onVehicleUpdate con el nuevo valor de vehicleInfo
+  onVehicleUpdate(id, vehicleInfo);
+};
 
   useEffect(() => {
     console.log('Server response:', serverResponse);
   }, [serverResponse]);
+
+  {isEditing.Placa ? (
+    <>
+      <input type="text" value={vehicleInfo.Placa} onChange={e => handleInputChange(e, 'Placa')} />
+      <button onClick={handleSaveClick}>Guardar</button>
+    </>
+  ) : (
+    <>
+      <span>Placa: {vehicleInfo.Placa}</span>
+      <button onClick={() => setIsEditing(prevIsEditing => ({ ...prevIsEditing, Placa: true }))}>🖉</button>
+    </>
+  )}
 
   useEffect(() => {
     fetch(`https://appespetours.fly.dev/api/v1/vehicles/${id}`)
@@ -78,10 +103,25 @@ function Vehicleupd() {
             </figure>
             <p className="flex flex-col p-6">
               <span className="font-light text-md mt-2">
-                Placa: {vehicleInfo.Placa}
+              {isEditing.Placa ? (
+              <>
+                <input type="text" value={vehicleInfo.Placa} onChange={e => handleInputChange(e, 'Placa')} />
+                <button onClick={handleSaveClick}>Guardar</button>
+              </>
+            ) : (
+              <>
+                <span>Placa: {vehicleInfo.Placa}</span>
+                <button onClick={() => setIsEditing(prevIsEditing => ({ ...prevIsEditing, Placa: true }))}>🖉</button>
+              </>
+            )}
               </span>
               <span className="font-light text-md mt-2">
-                No. Interno: {vehicleInfo.Interno}
+              {isEditing.Interno ? (
+              <input type="text" value={vehicleInfo.Interno} onChange={e => handleInputChange(e, 'Interno')} />
+            ) : (
+              <span>Interno: {vehicleInfo.Interno}</span>
+            )}
+            <button onClick={() => setIsEditing(prevIsEditing => ({ ...prevIsEditing, Interno: true }))}>🖉</button>
               </span>
               <span className="font-light text-md mt-2">
                 Modelo: {vehicleInfo.Modelo}
@@ -126,7 +166,7 @@ function Vehicleupd() {
                 SOAT: {vehicleInfo.Soat}
               </span>
               <span className="font-light text-md mt-2">
-                Tarj.Operación: {new Date(vehicleInfo.Operacion).toISOString().split('T')[0]}
+                Tarj.Operación: {vehicleInfo.Operacion}
               </span>
               <span className="font-light text-md mt-2">
                 Póliza Contractual: {vehicleInfo.Contractual}
@@ -248,9 +288,9 @@ function Vehicleupd() {
         )}
       </div>
       <div>
-      {console.log('Rendering with server response:', serverResponse)}
-      {serverResponse && <div>Response from server: {serverResponse.message}</div>}
-  </div>
+        {console.log('Rendering with server response:', serverResponse)}
+        {serverResponse && <div>Response from server: {serverResponse.message}</div>}
+      </div>
     </Layout>
   );
 }

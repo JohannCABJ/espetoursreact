@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 
 function UpdateVehicleForm({ vehicleId, onVehicleUpdate }) {
-  const [Interno, setInterno] = useState('');
+  const [Placa, setPlaca] = useState('');
 /*   const [Tecno, setTecno] = useState('');
   const [Soat, setSoat] = useState(''); */
   // Agrega más estados aquí para los demás campos
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onVehicleUpdate(vehicleId, { Interno,/*Tecno, Soat , y los demás campos aquí */ });
+    onVehicleUpdate(vehicleId, { Placa,/*Tecno, Soat , y los demás campos aquí */ });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label>
-          Interno:
+          InternoS:
           <input
             type="text"
-            value={Interno}
-            onChange={(e) => setInterno(e.target.value)}
+            value={Placa}
+            onChange={(e) => setPlaca(e.target.value)}
           />
         </label>
       </div>
